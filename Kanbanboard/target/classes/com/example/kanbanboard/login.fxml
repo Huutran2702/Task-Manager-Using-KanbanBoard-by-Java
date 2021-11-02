@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -7,30 +8,46 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kanbanboard.controller.Login">
+<AnchorPane prefHeight="210.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kanbanboard.controller.Login">
    <children>
-      <GridPane layoutY="7.0" prefHeight="502.0" prefWidth="640.0">
+      <GridPane layoutY="2.0" prefHeight="231.0" prefWidth="640.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="389.20001220703125" minWidth="10.0" prefWidth="221.60001525878909" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="463.9999725341796" minWidth="10.0" prefWidth="419.19998474121087" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="161.79999389648438" minHeight="10.0" prefHeight="54.00001220703125" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="52.00001831054687" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="52.00001831054687" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="53.400006103515636" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="63.20001831054688" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="401.59998016357423" minHeight="10.0" prefHeight="280.79998168945315" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Login" />
-            <Label text="acc" GridPane.rowIndex="1" />
-            <Label text="pass" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" onAction="#submit" text="submit" GridPane.rowIndex="3" />
-            <TextField fx:id="accText" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="passText" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" onAction="#create" text="create" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="alert" GridPane.rowIndex="4" />
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="638.0" text="Login" GridPane.columnSpan="2">
+               <font>
+                  <Font size="36.0" />
+               </font></Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="229.0" text="Account:" GridPane.rowIndex="2">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Label alignment="CENTER" prefHeight="18.0" prefWidth="241.0" text="Password:" GridPane.rowIndex="3">
+               <font>
+                  <Font size="18.0" />
+               </font></Label>
+            <Button mnemonicParsing="false" onAction="#submit" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets left="80.0" />
+               </GridPane.margin></Button>
+            <TextField fx:id="accText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="286.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="passText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="286.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button mnemonicParsing="false" onAction="#create" text="Create" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets left="80.0" />
+               </GridPane.margin></Button>
+            <Label fx:id="alert" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </children>
