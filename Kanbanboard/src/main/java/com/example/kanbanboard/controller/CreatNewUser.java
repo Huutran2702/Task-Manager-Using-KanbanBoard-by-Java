@@ -2,8 +2,7 @@ package com.example.kanbanboard.controller;
 
 import com.example.kanbanboard.FileSevice;
 import com.example.kanbanboard.Main;
-import com.example.kanbanboard.model.Role;
-import com.example.kanbanboard.model.User;
+import com.example.kanbanboard.model.*;
 import com.example.kanbanboard.repository.UserRepository;
 import com.example.kanbanboard.service.JacksonParser;
 import javafx.event.ActionEvent;
@@ -31,6 +30,7 @@ public class CreatNewUser {
     private void add(ActionEvent event) throws IOException {
         User newUser = new User(newUserAccount.getText(), newUserPassword.getText(), newUserEmail.getText(), newUserPhone.getText());
         newUser.setRole(Role.USER);
+
         Stage stage = Login.getStage(event);
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("login.fxml"));

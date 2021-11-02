@@ -5,7 +5,6 @@ import com.example.kanbanboard.Main;
 import com.example.kanbanboard.model.User;
 import com.example.kanbanboard.repository.UserRepository;
 import com.example.kanbanboard.service.JacksonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,11 +16,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.net.URL;
 
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class Login implements Initializable {
@@ -46,19 +42,20 @@ public class Login implements Initializable {
         userRepository.userList = JacksonParser.INSTANCE.toList(json,User.class);
        User user = userRepository.getByAccount(accText.getText());
             if (user == null) {
-                alert.setText("Tai khoan ban nhap khong dung");
+                alert.setText("Tài khoản bạn nhập không đúng");
             } else {
                 if (user.getPassword().equals(passText.getText())) {
                     Stage stage = getStage(event);
                     FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(Main.class.getResource("show.fxml"));
+                    loader.setLocation(Main.class.getResource("show-detail.fxml"));
                     Parent submitParent = loader.load();
-//                    HelloController controller = loader.getController();
-//                    controller.showUser(user);
+                    ShowDetail controller = loader.getController();
+                    controller.setUser(user);
+                    controller.showUser(user);
                     Scene scene = new Scene(submitParent);
                     stage.setScene(scene);
                 } else {
-                    alert.setText("Mat khau khong dung");
+                    alert.setText("Mật khẩu bạn nhập không đúng");
                 }
             }
     }

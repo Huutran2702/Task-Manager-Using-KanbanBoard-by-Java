@@ -2,12 +2,12 @@ package com.example.kanbanboard.model;
 
 public class Work {
     private int id;
-private String name;
+    private String name;
 
     public Work() {
     }
 
-    public Work(String name, int id) {
+    public Work(int id,String name) {
         this.name = name;
         this.id = id;
     }
