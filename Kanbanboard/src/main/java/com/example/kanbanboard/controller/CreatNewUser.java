@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -26,19 +27,33 @@ public class CreatNewUser {
     private TextField newUserEmail;
     @FXML
     private TextField newUserPhone;
-
     @FXML
-    private void add(ActionEvent event) throws IOException {
-        User newUser = new User(newUserAccount.getText(), newUserPassword.getText(), newUserEmail.getText(), newUserPhone.getText());
-        newUser.setRole(Role.USER);
-        Stage stage = ChangeScene.getStage(event);
-        FXMLLoader loader = ChangeScene.setScene(stage,"login.fxml");
+    private Label alertNewAcc;
+    @FXML
+    public void add(ActionEvent event) throws IOException {
         String json = FileService.read("package.json");
         userRepository = new UserRepository();
         userRepository.userList = JacksonParser.INSTANCE.toList(json, User.class);
-        userRepository.add(newUser);
-        FileService.write(userRepository, "package.json");
-
+        if (newUserAccount.getText().equals("")||newUserPassword.getText().equals("")||
+                newUserEmail.getText().equals("")||newUserPhone.getText().equals("")) {
+            alertNewAcc.setText("Thông tin đăng ký không hợp lệ");
+        } else {
+            if (userRepository.getByAccount(newUserAccount.getText())!=null) {
+                alertNewAcc.setText("Tài khoản đã tồn tại");
+            } else {
+                User newUser = new User(newUserAccount.getText(), newUserPassword.getText(), newUserEmail.getText(), newUserPhone.getText());
+                newUser.setRole(Role.USER);
+                userRepository.add(newUser);
+                FileService.write(userRepository, "package.json");
+                Stage stage = ChangeScene.getStage(event);
+                FXMLLoader loader = ChangeScene.setScene(stage,"login.fxml");
+            }
+        }
+    }
+    @FXML
+    public void backToLogin(ActionEvent event) throws IOException {
+    Stage stage = ChangeScene.getStage(event);
+    FXMLLoader loader = ChangeScene.setScene(stage,"login.fxml");
     }
 
 }
