@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class ShowDetail {
     private User user;
     @FXML
-    private GridPane border = new GridPane();
+    private GridPane border;
     @FXML
     private Label accName;
     @FXML
@@ -37,6 +37,7 @@ public class ShowDetail {
     private ComboBox<String> workspaceChoiceBox;
     @FXML
     private TextField newWorkspaceName;
+    private String nowWorkspace;
     public void showUser(User user) {
         accName.setText(user.getAccount());
         if (user.getWorkspace() == null) {
@@ -63,6 +64,7 @@ public class ShowDetail {
         for (int i = 0; i < user.getWorkspace().size(); i++) {
             if (user.getWorkspace().get(i).getName().equals(workspaceChoiceBox.getValue())) {
                 indexWorkspace = i;
+                nowWorkspace= user.getWorkspace().get(i).getName();
             }
         }
         for (int j = 0; j < user.getWorkspace().get(indexWorkspace).getWork().size(); j++) {
@@ -76,7 +78,9 @@ public class ShowDetail {
 
     @FXML
     public void selectWorkspace(ActionEvent event) {
-        loadWorkList();
+        if (border.getChildren().size()>0) {
+         loadWorkList();
+        }
         displayWorkList();
     }
 
@@ -119,12 +123,6 @@ public class ShowDetail {
         newWorkspaceName.setText("");
         displayWorkList();
         setChoiceBox(user);
-//        FileService.read("package.json");
-//        String json = FileService.read("package.json");
-//        UserRepository userRepository = new UserRepository();
-//        userRepository.userList = JacksonParser.INSTANCE.toList(json, User.class);
-//        userRepository.getByAccount(user.getAccount()).setWorkspace(user.getWorkspace());
-//        FileService.write(userRepository, "package.json");
     }
     public <T> Node editTable(ObservableList<T> obj, int index, int j) {
         TableView<T> table = new TableView<>();
@@ -137,14 +135,6 @@ public class ShowDetail {
         return table;
     }
     public void loadWorkList() {
-//        int indexWorkspace = 0;
-//        workspaceName.setText(workspaceChoiceBox.getValue());
-//        for (int i = 0; i < user.getWorkspace().size(); i++) {
-//            if (user.getWorkspace().get(i).getName().equals(workspaceChoiceBox.getValue())) {
-//                indexWorkspace = i;
-//            }
-//        }
-        border.getChildren().remove(0,3);
-
+            border.getChildren().remove(0,border.getChildren().size());
     }
 }
