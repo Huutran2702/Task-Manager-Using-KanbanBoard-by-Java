@@ -27,7 +27,7 @@ public class Main extends Application {
 //        userRepository.add(user);
 //        FileSevice.write(userRepository,"package.json");
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 640, 260);
+        Scene scene = new Scene(fxmlLoader.load(), 700, 260);
         stage.setTitle("Login!");
         stage.setScene(scene);
         stage.show();

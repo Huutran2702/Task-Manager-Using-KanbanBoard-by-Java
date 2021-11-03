@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -37,7 +38,6 @@ public class ShowDetail {
     private ComboBox<String> workspaceChoiceBox;
     @FXML
     private TextField newWorkspaceName;
-    private String nowWorkspace;
     public void showUser(User user) {
         accName.setText(user.getAccount());
         if (user.getWorkspace() == null) {
@@ -64,24 +64,19 @@ public class ShowDetail {
         for (int i = 0; i < user.getWorkspace().size(); i++) {
             if (user.getWorkspace().get(i).getName().equals(workspaceChoiceBox.getValue())) {
                 indexWorkspace = i;
-                nowWorkspace= user.getWorkspace().get(i).getName();
             }
         }
         for (int j = 0; j < user.getWorkspace().get(indexWorkspace).getWork().size(); j++) {
             ObservableList<Work> works = FXCollections.observableArrayList();
             works.addAll(user.getWorkspace().get(indexWorkspace).getWork().get(j).getItems());
             border.addColumn(j, editTable(works, indexWorkspace, j));
+            border.add(editButton(),j,1);
             border.setHgap(10);
             border.setVgap(10);
-        }
-    }
 
-    @FXML
-    public void selectWorkspace(ActionEvent event) {
-        if (border.getChildren().size()>0) {
-         loadWorkList();
         }
-        displayWorkList();
+        GridPane addWork = addNewWork();
+        border.add(addWork,0,2);
     }
 
     public User getUser() {
@@ -92,6 +87,26 @@ public class ShowDetail {
         this.user = user;
     }
 
+    private GridPane addNewWork() {
+        GridPane addWork = new GridPane();
+        Button add = new Button("Add");
+        add.setPrefWidth(40);
+        TextField newWork = new TextField();
+        addWork.add(add,1,0);
+        addWork.add(newWork,0,0);
+        addWork.setVgap(10);
+        addWork.setHgap(10);
+        addWork.setPadding(new Insets(50,10,10,10));
+        return addWork;
+    }
+
+    @FXML
+    public void selectWorkspace(ActionEvent event) {
+        if (border.getChildren().size()>0) {
+         loadWorkList();
+        }
+        displayWorkList();
+    }
     @FXML
     public void updateWorkspaceName(ActionEvent event) throws IOException {
         int index = 0;
@@ -101,8 +116,8 @@ public class ShowDetail {
             }
         }
         user.getWorkspace().get(index).setName(workspaceName.getText());
+        loadWorkList();
         setChoiceBox(user);
-        displayWorkList();
         saveFile();
     }
 
@@ -119,10 +134,26 @@ public class ShowDetail {
     void creatNewWorkspace(ActionEvent event) throws IOException {
         Workspace  newWorkspace=DefaultWorkspace.setWorkspace1();
         newWorkspace.setName(newWorkspaceName.getText());
+        newWorkspace.setWork(DefaultWorkspace.setWorkspace1().getWork());
         user.getWorkspace().add(newWorkspace);
         newWorkspaceName.setText("");
         displayWorkList();
         setChoiceBox(user);
+        saveFile();
+    }
+    @FXML
+    void deleteWorkspace(ActionEvent event) throws IOException {
+        int indexWorkspace = 0;
+        workspaceName.setText(workspaceChoiceBox.getValue());
+        for (int i = 0; i < user.getWorkspace().size(); i++) {
+            if (user.getWorkspace().get(i).getName().equals(workspaceChoiceBox.getValue())) {
+                indexWorkspace = i;
+            }
+        }
+        user.getWorkspace().remove(indexWorkspace);
+        displayWorkList();
+        setChoiceBox(user);
+        saveFile();
     }
     public <T> Node editTable(ObservableList<T> obj, int index, int j) {
         TableView<T> table = new TableView<>();
@@ -137,4 +168,17 @@ public class ShowDetail {
     public void loadWorkList() {
             border.getChildren().remove(0,border.getChildren().size());
     }
+    public GridPane editButton() {
+        GridPane edit = new GridPane();
+        Button update = new Button("Update");
+        Button delete = new Button("Delete");
+        Button next = new Button("Next");
+        edit.add(update,0,0);
+        edit.add(delete,1,0);
+        edit.add(next,2,0);
+        edit.setHgap(10);
+        edit.setVgap(10);
+        return edit;
+    }
+
 }
