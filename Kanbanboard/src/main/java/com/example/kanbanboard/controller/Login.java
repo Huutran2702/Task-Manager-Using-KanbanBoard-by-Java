@@ -1,6 +1,7 @@
 package com.example.kanbanboard.controller;
 
-import com.example.kanbanboard.FileSevice;
+import com.example.kanbanboard.Scene.ChangeScene;
+import com.example.kanbanboard.service.FileService;
 import com.example.kanbanboard.Main;
 import com.example.kanbanboard.model.User;
 import com.example.kanbanboard.repository.UserRepository;
@@ -37,7 +38,7 @@ public class Login implements Initializable {
 
     @FXML
     private void submit(ActionEvent event) throws Exception {
-        String json = FileSevice.read("package.json");
+        String json = FileService.read("package.json");
         userRepository = new UserRepository();
         userRepository.userList = JacksonParser.INSTANCE.toList(json,User.class);
        User user = userRepository.getByAccount(accText.getText());
@@ -45,15 +46,17 @@ public class Login implements Initializable {
                 alert.setText("Tài khoản bạn nhập không đúng");
             } else {
                 if (user.getPassword().equals(passText.getText())) {
-                    Stage stage = getStage(event);
-                    FXMLLoader loader = new FXMLLoader();
-                    loader.setLocation(Main.class.getResource("show-detail.fxml"));
-                    Parent submitParent = loader.load();
-                    ShowDetail controller = loader.getController();
+                    Stage stage = ChangeScene.getStage(event);
+//                    FXMLLoader loader = new FXMLLoader();
+//                    loader.setLocation(Main.class.getResource("show-detail.fxml"));
+//                    Parent submitParent = loader.load();
+//                    Scene scene = new Scene(submitParent);
+//                    stage.setScene(scene);
+//                    ShowDetail controller = loader.getController();
+                    ShowDetail controller = ChangeScene.setScene(stage,"show-detail.fxml").getController();
                     controller.setUser(user);
                     controller.showUser(user);
-                    Scene scene = new Scene(submitParent);
-                    stage.setScene(scene);
+
                 } else {
                     alert.setText("Mật khẩu bạn nhập không đúng");
                 }
@@ -61,17 +64,11 @@ public class Login implements Initializable {
     }
     @FXML
     public void create(ActionEvent event) throws Exception {
-        Stage stage = getStage(event);
-        FXMLLoader loader1 = new FXMLLoader();
-        loader1.setLocation(Main.class.getResource("create-new-account.fxml"));
-        Parent createNewAccountParent = loader1.load();
-        Scene scene = new Scene(createNewAccountParent);
-        stage.setScene(scene);
+        Stage stage = ChangeScene.getStage(event);
+        FXMLLoader loader = ChangeScene.setScene(stage,"create-new-account.fxml");
     }
 
-    public static Stage getStage(ActionEvent event) {
-        return (Stage) ((Node) event.getSource()).getScene().getWindow();
-    }
+
 
 
 }

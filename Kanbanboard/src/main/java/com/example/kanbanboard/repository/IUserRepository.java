@@ -1,4 +1,4 @@
-package com.example.kanbanboard.controller;
+package com.example.kanbanboard.repository;
 
 import com.example.kanbanboard.model.User;
 

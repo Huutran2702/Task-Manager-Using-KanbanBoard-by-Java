@@ -1,6 +1,7 @@
 package com.example.kanbanboard.controller;
 
-import com.example.kanbanboard.FileSevice;
+import com.example.kanbanboard.Scene.ChangeScene;
+import com.example.kanbanboard.service.FileService;
 import com.example.kanbanboard.Main;
 import com.example.kanbanboard.model.*;
 import com.example.kanbanboard.repository.UserRepository;
@@ -30,18 +31,14 @@ public class CreatNewUser {
     private void add(ActionEvent event) throws IOException {
         User newUser = new User(newUserAccount.getText(), newUserPassword.getText(), newUserEmail.getText(), newUserPhone.getText());
         newUser.setRole(Role.USER);
-
-        Stage stage = Login.getStage(event);
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("login.fxml"));
-        Parent submitParent = loader.load();
-        String json = FileSevice.read("package.json");
+        Stage stage = ChangeScene.getStage(event);
+        FXMLLoader loader = ChangeScene.setScene(stage,"login.fxml");
+        String json = FileService.read("package.json");
         userRepository = new UserRepository();
         userRepository.userList = JacksonParser.INSTANCE.toList(json, User.class);
         userRepository.add(newUser);
-        FileSevice.write(userRepository, "package.json");
-        Scene scene = new Scene(submitParent);
-        stage.setScene(scene);
+        FileService.write(userRepository, "package.json");
+
     }
 
 }

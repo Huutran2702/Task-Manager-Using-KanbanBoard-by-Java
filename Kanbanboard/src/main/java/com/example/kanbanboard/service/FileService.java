@@ -1,11 +1,11 @@
-package com.example.kanbanboard;
+package com.example.kanbanboard.service;
 
 import com.example.kanbanboard.repository.UserRepository;
 import com.example.kanbanboard.service.JacksonParser;
 
 import java.io.*;
 
-public class FileSevice {
+public class FileService {
    public static String read( String fileName) throws IOException {
        FileReader reader = new FileReader(fileName);
        BufferedReader buffer = new BufferedReader(reader);

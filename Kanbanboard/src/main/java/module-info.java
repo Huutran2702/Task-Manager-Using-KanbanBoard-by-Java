@@ -18,4 +18,8 @@ module com.example.kanbanboard {
     opens com.example.kanbanboard.controller to javafx.fxml;
     exports com.example.kanbanboard.model;
     opens com.example.kanbanboard.model to javafx.fxml;
+    exports com.example.kanbanboard.service;
+    opens com.example.kanbanboard.service to javafx.fxml;
+    exports com.example.kanbanboard.repository;
+    opens com.example.kanbanboard.repository to javafx.fxml;
 }

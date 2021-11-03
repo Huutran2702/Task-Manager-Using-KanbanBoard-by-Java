@@ -1,6 +1,5 @@
 package com.example.kanbanboard.repository;
 
-import com.example.kanbanboard.controller.IUserRepository;
 import com.example.kanbanboard.model.User;
 
 import java.util.ArrayList;

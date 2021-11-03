@@ -1,8 +1,11 @@
 package com.example.kanbanboard.model;
 
+import javafx.scene.control.Button;
+
 public class Work {
     private int id;
     private String name;
+
 
     public Work() {
     }
