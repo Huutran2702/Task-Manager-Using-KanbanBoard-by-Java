@@ -1,7 +1,9 @@
 package com.example.kanbanboard.service;
 
+import com.example.kanbanboard.model.User;
 import com.example.kanbanboard.repository.UserRepository;
 import com.example.kanbanboard.service.JacksonParser;
+import com.fasterxml.jackson.core.JsonParser;
 
 import java.io.*;
 
@@ -15,6 +17,13 @@ public class FileService {
        FileWriter writer = new FileWriter(fileName);
        BufferedWriter bufferedWriter = new BufferedWriter(writer);
        String json = JacksonParser.INSTANCE.toJson(userRepository.userList);
+       bufferedWriter.write(json);
+       bufferedWriter.close();
+   }
+   public static void writeAccountLogout(User user, String fileName) throws IOException {
+       FileWriter writer = new FileWriter(fileName);
+       BufferedWriter bufferedWriter = new BufferedWriter(writer);
+       String json = JacksonParser.INSTANCE.toJson(user);
        bufferedWriter.write(json);
        bufferedWriter.close();
    }

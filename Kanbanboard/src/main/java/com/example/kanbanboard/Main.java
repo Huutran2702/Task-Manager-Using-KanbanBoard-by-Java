@@ -15,17 +15,7 @@ import java.io.*;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-//        UserRepository userRepository = new UserRepository();
-//        Work readBook = new Work(0,"Read Book");
-//        WorkList workList = new WorkList("To do List", 0);
-//        workList.getItems().add(readBook);
-//        Workspace workspace = new Workspace("Khong gian chinh");
-//        workspace.getWork().add(workList);
-//        User user = new User("ngochuu","mytolove","huu@gmail.com","0392835054");
-//        user.getWorkspace().add(workspace);
-//        user.setRole(Role.ADMIN);
-//        userRepository.add(user);
-//        FileSevice.write(userRepository,"package.json");
+
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 700, 260);
         stage.setTitle("Login!");

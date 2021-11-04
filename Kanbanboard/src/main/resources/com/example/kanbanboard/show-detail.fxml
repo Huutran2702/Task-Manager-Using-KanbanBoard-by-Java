@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="708.0" prefWidth="950.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kanbanboard.controller.ShowDetail">
+<VBox alignment="CENTER" prefHeight="697.0" prefWidth="1200.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kanbanboard.controller.ShowDetail">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <BorderPane prefHeight="596.0" prefWidth="955.0">
+    <BorderPane prefHeight="669.0" prefWidth="1200.0">
         <center>
             <GridPane fx:id="border" prefHeight="518.0" prefWidth="651.0" BorderPane.alignment="CENTER">
                 <columnConstraints>
@@ -33,19 +33,36 @@
             </GridPane>
         </center>
       <right>
-         <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="518.0" prefWidth="146.0" BorderPane.alignment="CENTER">
+         <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="518.0" prefWidth="224.0" BorderPane.alignment="CENTER">
            <columnConstraints>
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
            </columnConstraints>
            <rowConstraints>
-             <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
+             <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="112.0000244140625" vgrow="SOMETIMES" />
+               <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="131.9999755859375" vgrow="SOMETIMES" />
            </rowConstraints>
             <children>
-               <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" text="Create List">
+               <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#createNewWorkList" prefHeight="30.0" prefWidth="77.0" text="Create List" GridPane.columnIndex="1">
                   <GridPane.margin>
-                     <Insets left="30.0" />
+                     <Insets left="8.0" />
                   </GridPane.margin>
                </Button>
+               <TextField fx:id="newWorkListName" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="130.0">
+                  <GridPane.margin>
+                     <Insets left="10.0" />
+                  </GridPane.margin>
+               </TextField>
+               <Button mnemonicParsing="false" onAction="#deleteList" text="Delete List" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <GridPane.margin>
+                     <Insets left="10.0" />
+                  </GridPane.margin>
+               </Button>
+               <ComboBox fx:id="comboBoxWorkList" maxWidth="-Infinity" prefHeight="26.0" prefWidth="130.0" promptText="Select WorkList" GridPane.rowIndex="1">
+                  <GridPane.margin>
+                     <Insets left="10.0" />
+                  </GridPane.margin>
+               </ComboBox>
             </children>
          </GridPane>
       </right>
@@ -60,6 +77,7 @@
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.199951171875" minWidth="10.0" prefWidth="145.80001220703127" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.2000732421875" minWidth="10.0" prefWidth="56.800048828125" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.199951171875" minWidth="10.0" prefWidth="48.7999267578125" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.199951171875" minWidth="10.0" prefWidth="100.0" />
            </columnConstraints>
            <rowConstraints>
              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -69,10 +87,15 @@
                <Label fx:id="accName" alignment="CENTER" prefHeight="18.0" prefWidth="106.0" text="Label" GridPane.columnIndex="1" />
                <TextField fx:id="workspaceName" maxWidth="-Infinity" prefHeight="26.0" prefWidth="153.0" GridPane.columnIndex="2" />
                <Button mnemonicParsing="false" onAction="#updateWorkspaceName" text="Update" GridPane.columnIndex="3" />
-               <ComboBox fx:id="workspaceChoiceBox" maxWidth="-Infinity" onAction="#selectWorkspace" prefHeight="26.0" prefWidth="138.0" promptText="Select Workspace" GridPane.columnIndex="4" />
+               <ComboBox fx:id="comboBoxWorkspace" maxWidth="-Infinity" onAction="#selectWorkspace" prefHeight="26.0" prefWidth="138.0" promptText="Select Workspace" GridPane.columnIndex="4" />
                <TextField fx:id="newWorkspaceName" alignment="CENTER" maxWidth="-Infinity" prefHeight="26.0" prefWidth="139.0" GridPane.columnIndex="5" />
                <Button mnemonicParsing="false" onAction="#creatNewWorkspace" text="Create" GridPane.columnIndex="6" />
                <Button mnemonicParsing="false" onAction="#deleteWorkspace" text="Delete" GridPane.columnIndex="7" />
+               <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#logout" text="Logout" GridPane.columnIndex="8">
+                  <GridPane.margin>
+                     <Insets left="20.0" />
+                  </GridPane.margin>
+               </Button>
             </children>
             <padding>
                <Insets bottom="20.0" top="20.0" />
