@@ -4,23 +4,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    private String account;
+    private String name;
+    private String email;
     private String password;
     private Role role;
-    private String email;
+    private LoginStatus loginStatus;
     private String phone;
     private List<Workspace> workspace;
 
     public User() {
     }
 
-    public User(String account, String password, String email, String phone) {
-        this.account = account;
+    public User(String name, String email, String password, String phone) {
+        this.name = name;
+        this.email = email;
         this.password = password;
         this.role = Role.USER;
-        this.email = email;
         this.phone = phone;
         workspace = new ArrayList<>();
+    }
+
+    public LoginStatus getLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(LoginStatus loginStatus) {
+        this.loginStatus = loginStatus;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Role getRole() {
@@ -31,12 +48,12 @@ public class User {
         this.role = role;
     }
 
-    public String getAccount() {
-        return account;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -45,14 +62,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPhone() {
@@ -72,9 +81,9 @@ public class User {
     }
 
     public static void transferFields(User oldUser, User newUser) {
-        oldUser.account = newUser.account;
-        oldUser.password = newUser.password;
+        oldUser.name = newUser.name;
         oldUser.email = newUser.email;
+        oldUser.password = newUser.password;
         oldUser.phone = newUser.phone;
         oldUser.workspace = newUser.workspace;
     }

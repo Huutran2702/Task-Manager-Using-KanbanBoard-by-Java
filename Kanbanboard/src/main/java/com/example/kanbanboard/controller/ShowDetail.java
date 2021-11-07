@@ -1,13 +1,11 @@
 package com.example.kanbanboard.controller;
 
 
+import com.example.kanbanboard.Main;
 import com.example.kanbanboard.Scene.ChangeScene;
-import com.example.kanbanboard.model.User;
+import com.example.kanbanboard.model.*;
 
 
-import com.example.kanbanboard.model.Work;
-import com.example.kanbanboard.model.WorkList;
-import com.example.kanbanboard.model.Workspace;
 import com.example.kanbanboard.repository.DefaultWorkspace;
 import com.example.kanbanboard.repository.UserRepository;
 import com.example.kanbanboard.service.FileService;
@@ -21,11 +19,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -46,7 +48,30 @@ public class ShowDetail {
     @FXML
     private TextField newWorkListName;
     @FXML
+    private TextField email_share;
+    @FXML
+    private TextField newWorkName;
+    @FXML
     private ComboBox<String> comboBoxWorkList;
+    @FXML
+    private Hyperlink share_workspace;
+    @FXML
+    private Button share_btn;
+    @FXML
+    private Button create_btn;
+    @FXML
+    private Button delete_btn;
+    @FXML
+    private Button add_work_btn;
+    @FXML
+    private Hyperlink create_new_list;
+    @FXML
+    private Hyperlink delete_list;
+    @FXML
+    private Hyperlink add_new_work;
+    @FXML
+    private Hyperlink display_user_list;
+
     public User getUser() {
         return user;
     }
@@ -56,16 +81,27 @@ public class ShowDetail {
     }
 
     public void showUser(User user) {
-        accName.setText(user.getAccount());
+        accName.setText(user.getName());
         if (user.getWorkspace() == null) {
             user.setWorkspace(new ArrayList<>(
             ));
             user.getWorkspace().add(0, DefaultWorkspace.setWorkspace());
         }
+        if (user.getRole().equals(Role.ADMIN)) {
+            setDisable(display_user_list,false);
+            setOpacity(display_user_list,1);
+        }
         setComboBoxWorkspace(user);
         setComboBoxWorkList();
     }
+    @FXML
+    void displayUserList(ActionEvent event) throws IOException {
+        Stage stage = ChangeScene.getStage(event);
+        DisplayUserList controller = ChangeScene.setScene(stage,"list-user.fxml","User List").getController();
+        controller.setAdmin(user);
+        controller.show();
 
+    }
     private void setComboBoxWorkspace(User user) {
         ObservableList<String> workspaces = FXCollections.observableArrayList();
         for (int i = 0; i < user.getWorkspace().size(); i++) {
@@ -76,7 +112,7 @@ public class ShowDetail {
 
     }
 
-    public void displayWorkList() {
+    public int getIndexWorkspace() {
         int indexWorkspace = 0;
         workspaceName.setText(comboBoxWorkspace.getValue());
         for (int i = 0; i < user.getWorkspace().size(); i++) {
@@ -84,19 +120,24 @@ public class ShowDetail {
                 indexWorkspace = i;
             }
         }
-        for (int j = 0; j < user.getWorkspace().get(indexWorkspace).getWork().size(); j++) {
+        return indexWorkspace;
+    }
+
+    public void displayWorkList() {
+        for (int j = 0; j < user.getWorkspace().get(getIndexWorkspace()).getWork().size(); j++) {
             ObservableList<Work> works = FXCollections.observableArrayList();
-            works.addAll(user.getWorkspace().get(indexWorkspace).getWork().get(j).getItems());
-            border.addColumn(j, editTable(works, indexWorkspace, j));
-            border.add(editButton(), j, 1);
+            works.addAll(user.getWorkspace().get(getIndexWorkspace()).getWork().get(j).getItems());
+            TableView<Work> table = editTable(works, getIndexWorkspace(), j);
+            border.addColumn(j, table);
+            border.add(editButton(j, table), j, 1);
             border.setHgap(10);
             border.setVgap(10);
+            border.setPadding(new Insets(30, 0, 0, 0));
 
         }
-        GridPane addWork = addNewWork();
-        border.add(addWork, 0, 2);
     }
-// Phương thức làm việc với Workspace
+
+    // Phương thức làm việc với Workspace
     @FXML
     public void updateWorkspaceName(ActionEvent event) throws IOException {
         boolean isExist = false;
@@ -161,14 +202,10 @@ public class ShowDetail {
         alert.setContentText("Bạn muốn xóa không gian làm việc này");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            int indexWorkspace = 0;
-            workspaceName.setText(comboBoxWorkspace.getValue());
-            for (int i = 0; i < user.getWorkspace().size(); i++) {
-                if (user.getWorkspace().get(i).getName().equals(comboBoxWorkspace.getValue())) {
-                    indexWorkspace = i;
-                }
+            if (user.getWorkspace().size() == 1) {
+                user.getWorkspace().add(DefaultWorkspace.setWorkspace());
             }
-            user.getWorkspace().remove(indexWorkspace);
+            user.getWorkspace().remove(getIndexWorkspace());
             displayWorkList();
             setComboBoxWorkspace(user);
             saveFile();
@@ -176,11 +213,37 @@ public class ShowDetail {
     }
 
     @FXML
+    void shareWorkspaceToOtherUser(ActionEvent event) throws IOException {
+        FileService.read("package.json");
+        String json = FileService.read("package.json");
+        UserRepository userRepository = new UserRepository();
+        userRepository.userList = JacksonParser.INSTANCE.toList(json, User.class);
+        if (email_share.getText().equals("")) {
+            alertWorkspace("Email không tồn tại");
+        } else if (userRepository.getByEmail(email_share.getText())==null) {
+            alertWorkspace("Email không tồn tại");
+        } else {
+            userRepository.getByEmail(email_share.getText()).getWorkspace().add(user.getWorkspace().get(getIndexWorkspace()));
+            FileService.write(userRepository, "package.json");
+
+        }
+        setDisable(share_workspace,false);
+        setOpacity(share_workspace,1);
+        share_workspace.underlineProperty().setValue(false);
+        setDisable(email_share,true);
+        setOpacity(email_share,0);
+        setDisable(share_btn,true);
+        setOpacity(share_btn,0);
+        email_share.setText("");
+    }
+    @FXML
     void logout(ActionEvent event) throws IOException {
+        user.setLoginStatus(LoginStatus.LOGOUT);
         FileService.writeAccountLogout(user, "save.json");
         Stage stage = ChangeScene.getStage(event);
-        FXMLLoader loader = ChangeScene.setScene(stage, "login.fxml");
+        FXMLLoader loader = ChangeScene.setScene(stage, "login.fxml", "Login!");
     }
+
     private void alertWorkspace(String message) {
         Alert alertInfor = new Alert(Alert.AlertType.INFORMATION);
         alertInfor.setHeaderText(null);
@@ -188,52 +251,55 @@ public class ShowDetail {
         alertInfor.showAndWait();
     }
 
-//    Load lại bảng WorkList
+    //    Load lại bảng WorkList
     public void loadWorkList() {
         border.getChildren().remove(0, border.getChildren().size());
     }
-//    Tạo GridPane để thêm công việc vào WorkList
-    private GridPane addNewWork() {
-        GridPane addWork = new GridPane();
-        Button add = new Button("Add");
-        add.setPrefWidth(40);
-        TextField newWork = new TextField();
-        addWork.add(add, 1, 0);
-        addWork.add(newWork, 0, 0);
-        addWork.setVgap(10);
-        addWork.setHgap(10);
-        addWork.setPadding(new Insets(50, 10, 10, 10));
-        return addWork;
-    }
-//    Thao tác với WorkList
-    public void setComboBoxWorkList() {
-        ObservableList<String> list = FXCollections.observableArrayList();
-        int indexWorkspace = 0;
-        for (int i = 0; i < user.getWorkspace().size(); i++) {
-            if (user.getWorkspace().get(i).getName().equals(comboBoxWorkspace.getValue())) {
-                indexWorkspace = i;
-                break;
+
+    //    Thêm công việc vào WorkList
+    @FXML
+    private void addNewWork() {
+        if (newWorkName.getText().equals("")) {
+            alertWorkspace("Tên công việc không hợp lệ");
+        } else {
+            user.getWorkspace().get(getIndexWorkspace()).getWork().get(0).getItems().add(new Work(0, newWorkName.getText()));
+            newWorkName.setText("");
+            loadWorkList();
+            displayWorkList();
+            try {
+                saveFile();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-        for (int i = 0; i < user.getWorkspace().get(indexWorkspace).getWork().size(); i++) {
-            list.add(user.getWorkspace().get(indexWorkspace).getWork().get(i).getName());
+        setDisable(add_new_work,false);
+        setOpacity(add_new_work,1);
+        add_new_work.underlineProperty().setValue(false);
+        setDisable(newWorkName,true);
+        setOpacity(newWorkName,0);
+        setDisable(add_work_btn,true);
+        setOpacity(add_work_btn,0);
+    }
+
+    //    Thao tác với WorkList
+    public void setComboBoxWorkList() {
+        ObservableList<String> list = FXCollections.observableArrayList();
+
+        for (int i = 0; i < user.getWorkspace().get(getIndexWorkspace()).getWork().size(); i++) {
+            list.add(user.getWorkspace().get(getIndexWorkspace()).getWork().get(i).getName());
         }
         comboBoxWorkList.setItems(list);
     }
+
     @FXML
     void createNewWorkList(ActionEvent event) throws IOException {
         String name = newWorkListName.getText();
-        int indexWorkspace = 0;
         boolean isExist = false;
         workspaceName.setText(comboBoxWorkspace.getValue());
-        for (int i = 0; i < user.getWorkspace().size(); i++) {
-            if (user.getWorkspace().get(i).getName().equals(comboBoxWorkspace.getValue())) {
-                indexWorkspace = i;
-            }
-        }
-        for (int i = 0; i < user.getWorkspace().get(indexWorkspace).getWork().size()  ; i++) {
-            if (user.getWorkspace().get(indexWorkspace).getWork().get(i).getName().equals(name)) {
-               isExist = true;
+
+        for (int i = 0; i < user.getWorkspace().get(getIndexWorkspace()).getWork().size(); i++) {
+            if (user.getWorkspace().get(getIndexWorkspace()).getWork().get(i).getName().equals(name)) {
+                isExist = true;
             }
         }
 
@@ -242,32 +308,36 @@ public class ShowDetail {
         } else if (isExist) {
             alertWorkspace("Tên WorkList đã tồn tại");
         } else {
-            user.getWorkspace().get(indexWorkspace).getWork().add(new WorkList(name,0));
+            WorkList newWorkList = new WorkList(name, 0);
+            newWorkList.getItems().add(new Work(0, "Công việc mới"));
+            user.getWorkspace().get(getIndexWorkspace()).getWork().add(newWorkList);
             loadWorkList();
             displayWorkList();
             saveFile();
             setComboBoxWorkList();
         }
+        newWorkListName.setText("");
+        setDisable(create_new_list,false);
+        setOpacity(create_new_list,1);
+        create_new_list.underlineProperty().setValue(false);
+        setDisable(newWorkListName,true);
+        setOpacity(newWorkListName,0);
+        setDisable(create_btn,true);
+        setOpacity(create_btn,0);
     }
+
     @FXML
     void deleteList(ActionEvent event) throws IOException {
-        int indexWorkspace = 0;
-        for (int i = 0; i < user.getWorkspace().size(); i++) {
-            if (user.getWorkspace().get(i).getName().equals(comboBoxWorkspace.getValue())) {
-                indexWorkspace = i;
-                break;
-            }
-        }
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText(null);
         alert.setContentText("Bạn muốn xóa không gian làm việc này");
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get()==ButtonType.OK) {
+        if (result.get() == ButtonType.OK) {
             String name = comboBoxWorkList.getValue();
-            for (int i = 0; i < user.getWorkspace().get(indexWorkspace).getWork().size(); i++) {
-                if (user.getWorkspace().get(indexWorkspace).getWork().get(i).getName().equals(name)) {
-                    user.getWorkspace().get(indexWorkspace).getWork().remove(i);
-                    break;
+            for (int i = 0; i < user.getWorkspace().get(getIndexWorkspace()).getWork().size(); i++) {
+                if (user.getWorkspace().get(getIndexWorkspace()).getWork().get(i).getName().equals(name)) {
+                    user.getWorkspace().get(getIndexWorkspace()).getWork().remove(i);
                 }
                 loadWorkList();
                 setComboBoxWorkList();
@@ -275,38 +345,142 @@ public class ShowDetail {
                 saveFile();
             }
         }
+        comboBoxWorkList.setValue(user.getWorkspace().get(getIndexWorkspace()).getWork().get(0).getName());
+        setDisable(delete_list,false);
+        setOpacity(delete_list,1);
+        delete_list.underlineProperty().setValue(false);
+        setDisable(comboBoxWorkList,true);
+        setOpacity(comboBoxWorkList,0);
+        setDisable(delete_btn,true);
+        setOpacity(delete_btn,0);
     }
-//    Thêm bảng WorkList
-    public <T> Node editTable(ObservableList<T> obj, int index, int j) {
-        TableView<T> table = new TableView<>();
-        TableColumn<T, String> nameCol = new TableColumn<>();
+
+
+    //    Thêm bảng WorkList
+    public TableView<Work> editTable(ObservableList<Work> obj, int index, int j) {
+        TableView<Work> table = new TableView<>();
+        table.setEditable(true);
+        TableColumn<Work, String> nameCol = new TableColumn<>();
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameCol.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
+//            user.getWorkspace().get(getIndexWorkspace()).getWork().get(index).getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
+            loadWorkList();
+            displayWorkList();
+            try {
+                saveFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         nameCol.setText(user.getWorkspace().get(index).getWork().get(j).getName());
         table.getColumns().add(nameCol);
         table.setItems(obj);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         return table;
     }
-//    Thêm GridPane edit công việc
-    public GridPane editButton() {
+
+    //    Thêm GridPane edit công việc
+    public GridPane editButton(int index, TableView<Work> node) {
         GridPane edit = new GridPane();
-        Button update = new Button("Update");
         Button delete = new Button("Delete");
-        Button next = new Button("Next");
-        edit.add(update, 0, 0);
-        edit.add(delete, 1, 0);
-        edit.add(next, 2, 0);
+        delete.setOnAction(event -> {
+            int work = node.getSelectionModel().getSelectedIndex();
+            user.getWorkspace().get(getIndexWorkspace()).getWork().get(index).getItems().remove(work);
+            loadWorkList();
+            displayWorkList();
+            try {
+                saveFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        edit.add(delete, 0, 0);
+        if (index < user.getWorkspace().get(getIndexWorkspace()).getWork().size() - 1) {
+            Button next = new Button("Next");
+            next.setOnAction(event -> {
+                int selectedIndex = node.getSelectionModel().getSelectedIndex();
+                if (index < user.getWorkspace().get(getIndexWorkspace()).getWork().size()) {
+                    Work work = user.getWorkspace().get(getIndexWorkspace()).getWork().get(index).getItems().remove(selectedIndex);
+                    user.getWorkspace().get(getIndexWorkspace()).getWork().get(index + 1).getItems().add(work);
+                    loadWorkList();
+                    displayWorkList();
+                    try {
+                        saveFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            edit.add(next, 1, 0);
+        }
         edit.setHgap(10);
         edit.setVgap(10);
+        edit.setPadding(new Insets(0, 0, 0, 20));
         return edit;
     }
-//    Lưu dữ liệu user về file
+
+    //    Lưu dữ liệu user về file
     private void saveFile() throws IOException {
         FileService.read("package.json");
         String json = FileService.read("package.json");
         UserRepository userRepository = new UserRepository();
         userRepository.userList = JacksonParser.INSTANCE.toList(json, User.class);
-        userRepository.getByAccount(user.getAccount()).setWorkspace(user.getWorkspace());
+        userRepository.getByEmail(user.getEmail()).setWorkspace(user.getWorkspace());
         FileService.write(userRepository, "package.json");
     }
+
+    //    Thao tác hyperLink
+    private void setOpacity(Node node, int a) {
+        node.opacityProperty().setValue(a);
+    }
+    private void setDisable(Node node,boolean a) {
+        node.disableProperty().setValue(a);
+    }
+    @FXML
+    void addNewWorkLink(ActionEvent event) {
+        setDisable(add_new_work,true);
+        setOpacity(add_new_work,0);
+        setDisable(newWorkName,false);
+        setOpacity(newWorkName,1);
+        setDisable(add_work_btn,false);
+        setOpacity(add_work_btn,1);
+    }
+
+
+
+    @FXML
+    void deleteListLink(ActionEvent event) {
+        setDisable(delete_list,true);
+        setOpacity(delete_list,0);
+        setDisable(comboBoxWorkList,false);
+        setOpacity(comboBoxWorkList,1);
+        setDisable(delete_btn,false);
+        setOpacity(delete_btn,1);
+
+    }
+    @FXML
+    void createNewList(ActionEvent event) {
+        setDisable(create_new_list,true);
+        setOpacity(create_new_list,0);
+        setDisable(newWorkListName,false);
+        setOpacity(newWorkListName,1);
+        setDisable(create_btn,false);
+        setOpacity(create_btn,1);
+    }
+    @FXML
+    void shareWorkspace(ActionEvent event) {
+        setDisable(share_workspace,true);
+        setOpacity(share_workspace,0);
+        setDisable(email_share,false);
+        setOpacity(email_share,1);
+        setDisable(share_btn,false);
+        setOpacity(share_btn,1);
+
+    }
+
+
 }

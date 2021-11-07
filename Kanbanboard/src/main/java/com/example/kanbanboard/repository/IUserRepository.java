@@ -5,11 +5,11 @@ import com.example.kanbanboard.model.User;
 import java.util.List;
 
 public interface IUserRepository {
-    User getByAccount(String account);
+    User getByEmail(String email);
 
     List<User> getUsers();
 
-    boolean exist(String account);
+    boolean exist(String email);
 
     void add(User newUser);
 

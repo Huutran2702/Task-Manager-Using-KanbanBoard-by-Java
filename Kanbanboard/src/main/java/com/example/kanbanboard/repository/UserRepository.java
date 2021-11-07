@@ -14,9 +14,9 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public User getByAccount(String account) {
+    public User getByEmail(String email) {
         for (User user: userList ) {
-            if (user.getAccount().equals(account)) {
+            if (user.getEmail().equals(email)) {
                 return user;
             }
         }
@@ -29,8 +29,8 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public boolean exist(String account) {
-        return getByAccount(account) != null;
+    public boolean exist(String email) {
+        return getByEmail(email) != null;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public void update(User user) {
-        User oldUser = getByAccount(user.getAccount());
+        User oldUser = getByEmail(user.getEmail());
         User.transferFields(oldUser, user);
     }
 }
