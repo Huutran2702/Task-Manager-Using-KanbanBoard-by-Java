@@ -56,27 +56,34 @@ public class CreatNewUser {
             String json = FileService.read("package.json");
             userRepository = new UserRepository();
             userRepository.userList = JacksonParser.INSTANCE.toList(json, User.class);
-            if (firstName.getText().equals("") || lastName.getText().equals("") || email.equals("") ||
-                    passWord.equals("") || enterPassWord.equals("") || phone.equals("")) {
-                alertNewAcc.setText("Thông tin đăng ký không hợp lệ");
+            if (firstName.getText().equals("")) {
+                alertNewAcc.setText("First name invalid");
+            } else if (lastName.getText().equals("")) {
+                alertNewAcc.setText("Last name invalid");
+            } else if (email.equals("")) {
+                alertNewAcc.setText("Email invalid");
+            } else if (passWord.equals("")) {
+                alertNewAcc.setText("Password invalid");
+            } else if (enterPassWord.equals("")) {
+                alertNewAcc.setText("Enter password invalid");
+            } else if (phone.equals("")){
+                alertNewAcc.setText("Phone invalid");
+            } else if (userRepository.getByEmail(email)!=null){
+                alertNewAcc.setText("Account already exists");
             } else {
-                if (userRepository.getByEmail(email) != null) {
-                    alertNewAcc.setText("Tài khoản đã tồn tại");
+                if (newUserPassword.getText().equals(enterPass.getText())) {
+                    User newUser = new User(name, email, passWord, phone);
+                    newUser.setRole(Role.USER);
+                    userRepository.add(newUser);
+                    FileService.write(userRepository, "package.json");
+                    Stage stage = ChangeScene.getStage(event);
+                    FXMLLoader loader = ChangeScene.setScene(stage, "login.fxml", "Login!");
                 } else {
-                    if (newUserPassword.getText().equals(enterPass.getText())) {
-                        User newUser = new User(name, email, passWord, phone);
-                        newUser.setRole(Role.USER);
-                        userRepository.add(newUser);
-                        FileService.write(userRepository, "package.json");
-                        Stage stage = ChangeScene.getStage(event);
-                        FXMLLoader loader = ChangeScene.setScene(stage, "login.fxml", "Login!");
-                    } else {
-                        alertNewAcc.setText("Mật khẩu không giống nhau");
-                    }
+                    alertNewAcc.setText("Enter password does not match");
                 }
             }
         } else {
-            alertNewAcc.setText("Email đăng ký không đúng định dạng");
+            alertNewAcc.setText("The registered email is not in the correct format");
         }
 
 

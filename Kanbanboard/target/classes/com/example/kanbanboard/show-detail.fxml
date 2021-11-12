@@ -13,18 +13,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="697.0" prefWidth="1200.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kanbanboard.controller.ShowDetail">
+<VBox alignment="CENTER" layoutX="-10.0" layoutY="-10.0" prefHeight="758.0" prefWidth="1383.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kanbanboard.controller.KanbanBoard">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <BorderPane prefHeight="669.0" prefWidth="1200.0">
+    <BorderPane prefHeight="762.0" prefWidth="1372.0">
         <center>
-            <GridPane fx:id="border" prefHeight="518.0" prefWidth="651.0" BorderPane.alignment="CENTER">
+            <GridPane fx:id="border" prefHeight="637.0" prefWidth="1045.0" BorderPane.alignment="CENTER">
                 <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
                 </columnConstraints>
                 <rowConstraints>
                     <RowConstraints maxHeight="472.79998779296875" minHeight="10.0" prefHeight="472.79998779296875" vgrow="SOMETIMES" />
@@ -37,17 +38,17 @@
             </GridPane>
         </center>
       <top>
-         <GridPane style="-fx-background-color: #2F86A6;" BorderPane.alignment="CENTER">
+         <GridPane prefHeight="75.0" prefWidth="1355.0" style="-fx-background-color: #2F86A6;" BorderPane.alignment="CENTER">
            <columnConstraints>
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.60001220703128" minWidth="10.0" prefWidth="167.60001220703128" />
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.99998779296874" minWidth="10.0" prefWidth="103.99998779296874" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.99998779296874" minWidth="10.0" prefWidth="40.0" />
                <ColumnConstraints hgrow="SOMETIMES" maxWidth="192.800048828125" minWidth="10.0" prefWidth="159.20001220703125" />
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.199951171875" minWidth="10.0" prefWidth="145.80001220703127" />
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.2000732421875" minWidth="10.0" prefWidth="56.800048828125" />
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.199951171875" minWidth="10.0" prefWidth="48.7999267578125" />
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.199951171875" minWidth="10.0" prefWidth="82.4000244140625" />
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="166.40001220703118" minWidth="10.0" prefWidth="144.79997558593755" />
-               <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.199951171875" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.199951171875" minWidth="10.0" prefWidth="160.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.2000732421875" minWidth="10.0" prefWidth="50.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.199951171875" minWidth="10.0" prefWidth="50.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.80001220703127" minWidth="10.0" prefWidth="60.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="218.80001220703127" minWidth="10.0" prefWidth="220.0" />
+               <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.199951171875" minWidth="10.0" prefWidth="50.0" />
            </columnConstraints>
            <rowConstraints>
              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -57,7 +58,7 @@
                   <font>
                      <Font size="14.0" />
                   </font></Label>
-               <Label fx:id="accName" alignment="CENTER" prefHeight="18.0" prefWidth="106.0" text="Label" textFill="#fffefe" GridPane.columnIndex="7">
+               <Label fx:id="accName" alignment="CENTER" prefHeight="20.0" prefWidth="117.0" text="Label" textFill="#fffefe" GridPane.columnIndex="7">
                   <font>
                      <Font size="14.0" />
                   </font></Label>
@@ -78,7 +79,12 @@
                <Button mnemonicParsing="false" onAction="#deleteWorkspace" prefHeight="26.0" prefWidth="61.0" text="Delete" GridPane.columnIndex="5" />
                <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#logout" text="Logout" GridPane.columnIndex="8">
                   <GridPane.margin>
-                     <Insets left="20.0" />
+                     <Insets left="10.0" />
+                  </GridPane.margin>
+               </Button>
+               <Button mnemonicParsing="false" onAction="#showInformation" text="Information" GridPane.columnIndex="7">
+                  <GridPane.margin>
+                     <Insets left="140.0" />
                   </GridPane.margin>
                </Button>
             </children>

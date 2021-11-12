@@ -60,11 +60,13 @@ public class Login implements Initializable {
         userRepository.userList = JacksonParser.INSTANCE.toList(json,User.class);
        User user = userRepository.getByEmail(accText.getText());
             if (user == null) {
-                alert.setText("Tài khoản bạn nhập không đúng");
+                alert.setText("The email you entered is incorrect");
             } else {
                 if (user.getPassword().equals(passValue.getText())) {
                     Stage stage = ChangeScene.getStage(event);
-                    ShowDetail controller = ChangeScene.setScene(stage,"show-detail.fxml","KanbanBoard").getController();
+                    stage.setX(80);
+                    stage.setY(60);
+                    KanbanBoard controller = ChangeScene.setScene(stage,"show-detail.fxml","KanbanBoard").getController();
                     controller.setUser(user);
                     controller.showUser(user);
                     if (login_status.isSelected()) {
@@ -74,13 +76,15 @@ public class Login implements Initializable {
                     }
                     FileService.writeAccountLogout(user, "save.json");
                 } else {
-                    alert.setText("Mật khẩu bạn nhập không đúng");
+                    alert.setText("The password you entered is incorrect");
                 }
             }
     }
     @FXML
     public void create(ActionEvent event) throws Exception {
         Stage stage = ChangeScene.getStage(event);
+        stage.setX(450);
+        stage.setY(100);
         FXMLLoader loader = ChangeScene.setScene(stage,"create-new-user.fxml","Create New User");
     }
 

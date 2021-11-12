@@ -1,15 +1,7 @@
 package com.example.kanbanboard;
 
-import com.example.kanbanboard.Scene.ChangeScene;
-import com.example.kanbanboard.controller.ShowDetail;
-import com.example.kanbanboard.model.*;
-import com.example.kanbanboard.repository.UserRepository;
-import com.example.kanbanboard.service.FileService;
-import com.example.kanbanboard.service.JacksonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
