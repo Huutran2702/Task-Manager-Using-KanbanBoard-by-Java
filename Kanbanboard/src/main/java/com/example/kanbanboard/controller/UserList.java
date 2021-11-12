@@ -24,9 +24,9 @@ import java.util.ArrayList;
 
 public class UserList {
     private User admin;
-private UserRepository userRepository;
+    private UserRepository userRepository;
     @FXML
-    private ComboBox<Role> comboBox_role ;
+    private ComboBox<Role> comboBox_role;
     @FXML
     private TableColumn<User, String> email_col;
 
@@ -50,46 +50,46 @@ private UserRepository userRepository;
         this.admin = admin;
     }
 
-public void show() {
-    ObservableList<User> users = FXCollections.observableArrayList();
-    try {
-        FileService.read("package.json");
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    String json = null;
-    try {
-        json = FileService.read("package.json");
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    userRepository = new UserRepository();
-    userRepository.userList = JacksonParser.INSTANCE.toList(json, User.class);
-    for (User user: userRepository.userList
-    ) {
-        users.add(user);
-    }
-    name_col.setCellValueFactory(new PropertyValueFactory<>("name"));
-    email_col.setCellValueFactory(new PropertyValueFactory<>("email"));
-    phone_col.setCellValueFactory(new PropertyValueFactory<>("phone"));
-    role_col.setCellValueFactory(new PropertyValueFactory<>("role"));
-    table.setItems(users);
-    setComboBoxRole();
+    public void show() {
+        ObservableList<User> users = FXCollections.observableArrayList();
+        try {
+            FileService.read("package.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String json = null;
+        try {
+            json = FileService.read("package.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        userRepository = new UserRepository();
+        userRepository.userList = JacksonParser.INSTANCE.toList(json, User.class);
+        for (User user : userRepository.userList
+        ) {
+            users.add(user);
+        }
+        name_col.setCellValueFactory(new PropertyValueFactory<>("name"));
+        email_col.setCellValueFactory(new PropertyValueFactory<>("email"));
+        phone_col.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        role_col.setCellValueFactory(new PropertyValueFactory<>("role"));
+        table.setItems(users);
+        setComboBoxRole();
 
-}
+    }
 
     private void setComboBoxRole() {
         ObservableList<Role> roles = FXCollections.observableArrayList();
-        roles.addAll(Role.USER,Role.ADMIN);
+        roles.addAll(Role.USER, Role.ADMIN);
         comboBox_role.setItems(roles);
     }
 
     @FXML
     void selectRole(ActionEvent event) throws IOException {
         int count = 0;
-        for (User user: userRepository.userList) {
+        for (User user : userRepository.userList) {
             if (user.getRole().equals(Role.ADMIN)) {
-                count+= 1;
+                count += 1;
             }
         }
 
@@ -100,7 +100,7 @@ public void show() {
             comboBox_role.setPromptText("Set Role");
             show();
         } else if (selected.getRole().equals(Role.ADMIN)) {
-            if (count>1) {
+            if (count > 1) {
                 userRepository.getByEmail(selected.getEmail()).setRole(comboBox_role.getValue());
                 FileService.write(userRepository, "package.json");
                 comboBox_role.setPromptText("Set Role");
@@ -114,12 +114,13 @@ public void show() {
         }
 
     }
+
     @FXML
     void back(ActionEvent event) throws IOException {
         Stage stage = ChangeScene.getStage(event);
         stage.setX(80);
         stage.setY(60);
-        KanbanBoard controller = ChangeScene.setScene(stage,"show-detail.fxml","Kanban Board").getController();
+        KanbanBoard controller = ChangeScene.setScene(stage, "show-detail.fxml", "Kanban Board").getController();
         controller.setUser(admin);
         controller.showUser(admin);
 

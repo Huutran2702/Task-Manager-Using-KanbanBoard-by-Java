@@ -17,7 +17,7 @@ public class DefaultWorkspace  {
         workList1.getItems().add(work2);
         workList2.getItems().add(work3);
         workList.getItems().add(work1);
-        Workspace workspace = new Workspace("Khong gian chinh");
+        Workspace workspace = new Workspace("Default workspace");
         workspace.getWork().add(workList);
         workspace.getWork().add(workList1);
         workspace.getWork().add(workList2);
@@ -33,7 +33,7 @@ public class DefaultWorkspace  {
         workList1.getItems().add(work2);
         workList2.getItems().add(work3);
         workList.getItems().add(work1);
-        Workspace workspace = new Workspace("Khong gian chinh");
+        Workspace workspace = new Workspace("Default workspace");
         workspace.getWork().add(workList);
         workspace.getWork().add(workList1);
         workspace.getWork().add(workList2);

@@ -47,7 +47,6 @@ public class CreatNewUser {
     public void add(ActionEvent event) throws IOException {
         String name = firstName.getText() + " " + lastName.getText();
         boolean matches = newUserAccount.getText().matches("[A-Z,a-z0-9]+@+[a-z,0-9]+.+[a-z]");
-        System.out.println(matches);
         if (matches) {
             String  email = newUserAccount.getText();
             String passWord = getPass(newUserPassword, newPassValue);

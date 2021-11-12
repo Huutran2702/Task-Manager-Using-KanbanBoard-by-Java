@@ -91,7 +91,7 @@ public class KanbanBoard {
         if (user.getWorkspace() == null) {
             user.setWorkspace(new ArrayList<>(
             ));
-            user.getWorkspace().add(0, DefaultWorkspace.setWorkspace());
+            alertWorkspace("Please start by creating a workspace ==> Enter the workspace name in the new workspace name box");
         }
         if (user.getRole().equals(Role.ADMIN)) {
             setDisable(display_user_list,false);
@@ -105,9 +105,6 @@ public class KanbanBoard {
         Stage stage = ChangeScene.getStage(event);
         stage.setX(400);
         stage.setY(80);
-        System.out.println(stage.getX());
-        System.out.println(stage.getY());
-
         UserList controller = ChangeScene.setScene(stage,"list-user.fxml","User List").getController();
         controller.setAdmin(user);
         controller.show();
@@ -135,17 +132,21 @@ public class KanbanBoard {
     }
 
     public void displayWorkList() {
-        for (int j = 0; j < user.getWorkspace().get(getIndexWorkspace()).getWork().size(); j++) {
-            ObservableList<Work> works = FXCollections.observableArrayList();
-            works.addAll(user.getWorkspace().get(getIndexWorkspace()).getWork().get(j).getItems());
-            TableView<Work> table = editTable(works, getIndexWorkspace(), j);
-            border.addColumn(j, table);
+        if (user.getWorkspace().get(getIndexWorkspace()).getWork()==null) {
+            alertWorkspace("Please create new worklist");
+        } else {
+            for (int j = 0; j < user.getWorkspace().get(getIndexWorkspace()).getWork().size(); j++) {
+                ObservableList<Work> works = FXCollections.observableArrayList();
+                works.addAll(user.getWorkspace().get(getIndexWorkspace()).getWork().get(j).getItems());
+                TableView<Work> table = editTable(works, getIndexWorkspace(), j);
+                border.addColumn(j, table);
 //            border.getColumnConstraints().get(j).setMinWidth(150);
-            border.add(editButton(j, table), j, 1);
-            border.setHgap(10);
-            border.setVgap(10);
-            border.setPadding(new Insets(30, 0, 0, 0));
+                border.add(editButton(j, table), j, 1);
+                border.setHgap(10);
+                border.setVgap(10);
+                border.setPadding(new Insets(30, 0, 0, 0));
 
+            }
         }
     }
 
@@ -153,7 +154,6 @@ public class KanbanBoard {
     @FXML
     public void updateWorkspaceName(ActionEvent event) throws IOException {
         String newWorkspaceName = workspaceName.getText();
-        System.out.println(newWorkspaceName);
         boolean isExist = false;
         for (int i = 0; i < user.getWorkspace().size(); i++) {
             if (user.getWorkspace().get(i).getName().equals(workspaceName.getText())) {
@@ -215,6 +215,7 @@ public class KanbanBoard {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             if (user.getWorkspace().size() == 1) {
+                alertWorkspace("You have deleted all workspace ==> We will return the workspace to default");
                 user.getWorkspace().add(DefaultWorkspace.setWorkspace());
             }
             user.getWorkspace().remove(getIndexWorkspace());
@@ -235,6 +236,9 @@ public class KanbanBoard {
         } else if (userRepository.getByEmail(email_share.getText())==null) {
             alertWorkspace("Email does not exist");
         } else {
+            if( userRepository.getByEmail(email_share.getText()).getWorkspace()==null) {
+                userRepository.getByEmail(email_share.getText()).setWorkspace(new ArrayList<>());
+            }
             userRepository.getByEmail(email_share.getText()).getWorkspace().add(user.getWorkspace().get(getIndexWorkspace()));
             FileService.write(userRepository, "package.json");
 
@@ -392,7 +396,6 @@ public class KanbanBoard {
         });
         nameCol.setText(user.getWorkspace().get(index).getWork().get(j).getName());
         boolean editable = nameCol.isEditable();
-        System.out.println(editable);
         table.getColumns().add(nameCol);
         table.setItems(obj);
         table.setMinWidth(150);
