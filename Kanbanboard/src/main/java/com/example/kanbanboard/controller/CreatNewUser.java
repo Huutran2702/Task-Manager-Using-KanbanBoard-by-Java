@@ -1,5 +1,6 @@
 package com.example.kanbanboard.controller;
 
+import com.example.kanbanboard.Main;
 import com.example.kanbanboard.Scene.ChangeScene;
 import com.example.kanbanboard.service.FileService;
 import com.example.kanbanboard.model.*;
@@ -15,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.Objects;
 
 public class CreatNewUser {
     public UserRepository userRepository;
@@ -77,6 +79,7 @@ public class CreatNewUser {
                     FileService.write(userRepository, "package.json");
                     Stage stage = ChangeScene.getStage(event);
                     FXMLLoader loader = ChangeScene.setScene(stage, "login.fxml", "Login!");
+
                 } else {
                     alertNewAcc.setText("Enter password does not match");
                 }

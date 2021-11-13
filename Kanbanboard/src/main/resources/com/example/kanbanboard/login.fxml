@@ -12,31 +12,35 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="210.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kanbanboard.controller.Login">
+<AnchorPane prefHeight="350.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kanbanboard.controller.Login">
    <children>
-      <GridPane layoutY="2.0" prefHeight="231.0" prefWidth="640.0">
+      <GridPane layoutY="2.0" prefHeight="350.0" prefWidth="640.0" style="-fx-background-color: rgb(54, 139, 133);">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="389.20001220703125" minWidth="10.0" prefWidth="221.60001525878909" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="463.9999725341796" minWidth="10.0" prefWidth="419.19998474121087" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="161.79999389648438" minHeight="10.0" prefHeight="54.00001220703125" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="52.00001831054687" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="52.00001831054687" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="40.40001831054688" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="41.199981689453125" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="63.20001831054688" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="161.79999389648438" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="312.20001258850095" minHeight="9.399987792968744" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="312.20001258850095" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label alignment="CENTER" prefHeight="18.0" prefWidth="638.0" text="Login" GridPane.columnSpan="2">
+            <Label id="welcome-text" alignment="CENTER" prefHeight="47.0" prefWidth="172.0" text="Login" GridPane.columnSpan="2">
                <font>
                   <Font size="36.0" />
-               </font></Label>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="187.0" text="Email:" GridPane.rowIndex="2">
+               </font>
+               <GridPane.margin>
+                  <Insets left="230.0" />
+               </GridPane.margin></Label>
+            <Label id="content" alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="187.0" text="Email:" GridPane.rowIndex="2">
                <font>
                   <Font size="18.0" />
                </font></Label>
-            <Label alignment="CENTER" prefHeight="18.0" prefWidth="241.0" text="Password:" GridPane.rowIndex="3">
+            <Label id="content" alignment="CENTER" prefHeight="18.0" prefWidth="203.0" text="Password:" GridPane.rowIndex="3">
                <font>
                   <Font size="18.0" />
                </font></Label>
@@ -44,7 +48,7 @@
                <GridPane.margin>
                   <Insets left="80.0" />
                </GridPane.margin></Button>
-            <TextField fx:id="accText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="26.0" prefWidth="286.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="accText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="29.0" prefWidth="286.0" style="-fx-border-radius: 10px;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Button mnemonicParsing="false" onAction="#create" text="Create" GridPane.rowIndex="5">
                <GridPane.margin>
                   <Insets left="80.0" />
@@ -57,7 +61,10 @@
                </GridPane.margin>
             </Button>
             <TextField fx:id="passText" disable="true" maxWidth="-Infinity" prefHeight="27.0" prefWidth="286.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <CheckBox fx:id="login_status" mnemonicParsing="false" text="Save information login" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <CheckBox fx:id="login_status" mnemonicParsing="false" text="Save information login" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin></CheckBox>
          </children>
       </GridPane>
    </children>

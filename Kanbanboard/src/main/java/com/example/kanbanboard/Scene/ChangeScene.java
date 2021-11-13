@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ChangeScene {
     public static Stage getStage(ActionEvent event) {
@@ -19,6 +20,7 @@ public class ChangeScene {
         loader.setLocation(Main.class.getResource(fileName));
         Parent submitParent = loader.load();
         Scene scene = new Scene(submitParent);
+        scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("css/login.css")).toExternalForm());
         stage.setTitle(title);
         stage.setScene(scene);
         return loader;

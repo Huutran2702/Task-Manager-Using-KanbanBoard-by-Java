@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="355.0" prefWidth="526.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.kanbanboard.controller.InformationUser">
-   <GridPane layoutX="4.0" layoutY="4.0" prefHeight="351.0" prefWidth="552.0">
+   <GridPane id="grid_information" layoutX="4.0" layoutY="4.0" prefHeight="351.0" prefWidth="552.0" style="-fx-background-color: rgb(54, 139, 133);">
       <columnConstraints>
          <ColumnConstraints hgrow="SOMETIMES" maxWidth="353.60003662109375" minWidth="10.0" prefWidth="170.19998779296876" />
          <ColumnConstraints hgrow="SOMETIMES" maxWidth="467.20001220703125" minWidth="10.0" prefWidth="381.4000122070313" />
@@ -26,12 +26,12 @@
          <RowConstraints maxHeight="220.00002136230466" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
          <RowConstraints maxHeight="272.6000274658203" minHeight="10.0" prefHeight="63.19999999999999" vgrow="SOMETIMES" />
       </rowConstraints>
-      <Label alignment="CENTER" prefHeight="30.0" prefWidth="592.0" text="USER INFORMATION" GridPane.columnSpan="2">
+      <Label id="welcome-text" alignment="CENTER" prefHeight="30.0" prefWidth="592.0" text="USER INFORMATION" GridPane.columnSpan="2">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" prefHeight="26.0" prefWidth="81.0" text="Name:" GridPane.rowIndex="3">
+      <Label id="content" alignment="CENTER" prefHeight="26.0" prefWidth="81.0" text="Name:" GridPane.rowIndex="3">
          <font>
             <Font size="17.0" />
          </font>
@@ -39,7 +39,7 @@
             <Insets left="40.0" />
          </GridPane.margin>
       </Label>
-      <Label alignment="CENTER" prefHeight="26.0" prefWidth="78.0" text="Email:" GridPane.rowIndex="2">
+      <Label id="content" alignment="CENTER" prefHeight="26.0" prefWidth="78.0" text="Email:" GridPane.rowIndex="2">
          <font>
             <Font size="17.0" />
          </font>
@@ -47,7 +47,7 @@
             <Insets left="40.0" />
          </GridPane.margin>
       </Label>
-      <Label alignment="CENTER" prefHeight="26.0" prefWidth="106.0" text="Password:" GridPane.rowIndex="5">
+      <Label id="content" alignment="CENTER" prefHeight="26.0" prefWidth="106.0" text="Password:" GridPane.rowIndex="5">
          <font>
             <Font size="17.0" />
          </font>
@@ -55,7 +55,7 @@
             <Insets left="40.0" />
          </GridPane.margin>
       </Label>
-      <Label alignment="CENTER" prefHeight="26.0" prefWidth="84.0" text="Phone:" GridPane.rowIndex="4">
+      <Label id="content" alignment="CENTER" prefHeight="26.0" prefWidth="84.0" text="Phone:" GridPane.rowIndex="4">
          <font>
             <Font size="17.0" />
          </font>
@@ -68,7 +68,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="user_email" prefHeight="23.0" prefWidth="301.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <Label id="content" fx:id="user_email" prefHeight="23.0" prefWidth="301.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <font>
             <Font size="14.0" />
          </font>
@@ -83,7 +83,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="label_enterpassword" alignment="CENTER" disable="true" opacity="0.0" prefHeight="26.0" prefWidth="183.0" text="Enter password:" GridPane.rowIndex="6">
+      <Label id="content" fx:id="label_enterpassword" alignment="CENTER" disable="true" opacity="0.0" prefHeight="26.0" prefWidth="183.0" text="Enter password:" GridPane.rowIndex="6">
          <font>
             <Font size="17.0" />
          </font>
@@ -104,17 +104,17 @@
             <Insets top="10.0" />
          </GridPane.margin>
       </TextField>
-      <TextField fx:id="textfield_password" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+      <TextField id="content" fx:id="textfield_password" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
-      <TextField fx:id="textfield_phone" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <TextField id="content" fx:id="textfield_phone" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
-      <TextField fx:id="textfield_name" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+      <TextField id="content" fx:id="textfield_name" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <font>
             <Font size="14.0" />
          </font>

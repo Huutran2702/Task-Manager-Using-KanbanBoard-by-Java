@@ -1,0 +1,52 @@
+#content {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+
+}
+.button {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-color: rgb(16, 86, 82);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+.button:hover {
+    -fx-background-color: linear-gradient(#2A5058, #61a2b1);
+}
+#welcome-text {
+    -fx-font-size: 32px;
+    -fx-font-family: "Arial Black";
+    -fx-fill: #818181;
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+}
+.check-box {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}
+.text-field {
+    -fx-border-radius: 10px;
+    border-style: outset;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.combo-box {
+    -fx-font-size: 14px;
+}
+.table-view {
+    -fx-font-size: 14px;
+    -fx-background-color: rgb(243, 240, 215);
+    -fx-font-weight: bold;
+}
+.hyperlink {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+.hyperlink:hover {
+
+}

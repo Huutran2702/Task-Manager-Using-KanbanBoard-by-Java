@@ -21,12 +21,13 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -137,10 +138,9 @@ public class KanbanBoard {
         } else {
             for (int j = 0; j < user.getWorkspace().get(getIndexWorkspace()).getWork().size(); j++) {
                 ObservableList<Work> works = FXCollections.observableArrayList();
-                works.addAll(user.getWorkspace().get(getIndexWorkspace()).getWork().get(j).getItems());
+                works.addAll(getWorkInList(j));
                 TableView<Work> table = editTable(works, getIndexWorkspace(), j);
                 border.addColumn(j, table);
-//            border.getColumnConstraints().get(j).setMinWidth(150);
                 border.add(editButton(j, table), j, 1);
                 border.setHgap(10);
                 border.setVgap(10);
@@ -257,6 +257,8 @@ public class KanbanBoard {
         user.setLoginStatus(LoginStatus.LOGOUT);
         FileService.writeAccountLogout(user, "save.json");
         Stage stage = ChangeScene.getStage(event);
+        stage.setX(400);
+        stage.setY(100);
         FXMLLoader loader = ChangeScene.setScene(stage, "login.fxml", "Login!");
     }
 
@@ -278,7 +280,9 @@ public class KanbanBoard {
         if (newWorkName.getText().equals("")) {
             alertWorkspace("Invalid work name");
         } else {
-            user.getWorkspace().get(getIndexWorkspace()).getWork().get(0).getItems().add(new Work(0, newWorkName.getText()));
+            System.out.println(getWorkInList(0).get(0).getName());
+            getWorkInList(0).add(new Work(0, newWorkName.getText()));
+            getWorkInList(0).removeIf(work -> work.getName().equals(" "));
             newWorkName.setText("");
             loadWorkList();
             displayWorkList();
@@ -384,18 +388,22 @@ public class KanbanBoard {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameCol.setCellFactory(TextFieldTableCell.forTableColumn());
         nameCol.setOnEditCommit(event -> {
-            event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
-//            user.getWorkspace().get(getIndexWorkspace()).getWork().get(index).getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
-            loadWorkList();
-            displayWorkList();
-            try {
-                saveFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (event.getNewValue().equals("")) {
+                alertWorkspace("Workname invalid");
+            } else {
+                event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
+                loadWorkList();
+                displayWorkList();
+                try {
+                    saveFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         nameCol.setText(user.getWorkspace().get(index).getWork().get(j).getName());
-        boolean editable = nameCol.isEditable();
+
+        nameCol.setEditable(true);
         table.getColumns().add(nameCol);
         table.setItems(obj);
         table.setMinWidth(150);
@@ -410,7 +418,15 @@ public class KanbanBoard {
         Button delete = new Button("Delete");
         delete.setOnAction(event -> {
             int work = node.getSelectionModel().getSelectedIndex();
-            user.getWorkspace().get(getIndexWorkspace()).getWork().get(index).getItems().remove(work);
+            if (getWorkInList(index).size()==1) {
+                getWorkInList(index).add(new Work(9," "));
+                try {
+                    saveFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            getWorkInList(index).remove(work);
             loadWorkList();
             displayWorkList();
             try {
@@ -426,8 +442,17 @@ public class KanbanBoard {
             next.setOnAction(event -> {
                 int selectedIndex = node.getSelectionModel().getSelectedIndex();
                 if (index < user.getWorkspace().get(getIndexWorkspace()).getWork().size()) {
-                    Work work = user.getWorkspace().get(getIndexWorkspace()).getWork().get(index).getItems().remove(selectedIndex);
-                    user.getWorkspace().get(getIndexWorkspace()).getWork().get(index + 1).getItems().add(work);
+                    if (getWorkInList(index).size()<=1) {
+                        getWorkInList(index).add(new Work(9," "));
+                        try {
+                            saveFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Work work = getWorkInList(index).remove(selectedIndex);
+                    getWorkInList(index+1).removeIf(works -> works.getName().equals(" "));
+                    getWorkInList(index + 1).add(work);
                     loadWorkList();
                     displayWorkList();
                     try {
@@ -444,6 +469,10 @@ public class KanbanBoard {
         edit.setVgap(10);
         edit.setPadding(new Insets(0, 0, 0, 20));
         return edit;
+    }
+
+    private List<Work> getWorkInList(int index) {
+        return user.getWorkspace().get(getIndexWorkspace()).getWork().get(index).getItems();
     }
 
     //    Lưu dữ liệu user về file
