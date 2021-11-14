@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -33,8 +34,13 @@ import java.util.Optional;
 
 public class KanbanBoard {
     private User user;
+
+    @FXML
+    private ScrollPane scrollPane;
     @FXML
     private GridPane border;
+    @FXML
+    private GridPane editGridPane;
     @FXML
     private Label accName;
     @FXML
@@ -77,12 +83,13 @@ public class KanbanBoard {
     public void setUser(User user) {
         this.user = user;
     }
+
     @FXML
     void showInformation(ActionEvent event) throws IOException {
         Stage stage = ChangeScene.getStage(event);
         stage.setX(500);
         stage.setY(80);
-        InformationUser controller = ChangeScene.setScene(stage,"show-information-user.fxml","User Information").getController();
+        InformationUser controller = ChangeScene.setScene(stage, "show-information-user.fxml", "User Information").getController();
         controller.setUser(user);
         controller.show(user);
     }
@@ -95,22 +102,24 @@ public class KanbanBoard {
             alertWorkspace("Please start by creating a workspace ==> Enter the workspace name in the new workspace name box");
         }
         if (user.getRole().equals(Role.ADMIN)) {
-            setDisable(display_user_list,false);
-            setOpacity(display_user_list,1);
+            setDisable(display_user_list, false);
+            setOpacity(display_user_list, 1);
         }
         setComboBoxWorkspace(user);
         setComboBoxWorkList();
     }
+
     @FXML
     void displayUserList(ActionEvent event) throws IOException {
         Stage stage = ChangeScene.getStage(event);
         stage.setX(400);
         stage.setY(80);
-        UserList controller = ChangeScene.setScene(stage,"list-user.fxml","User List").getController();
+        UserList controller = ChangeScene.setScene(stage, "list-user.fxml", "User List").getController();
         controller.setAdmin(user);
         controller.show();
 
     }
+
     private void setComboBoxWorkspace(User user) {
         ObservableList<String> workspaces = FXCollections.observableArrayList();
         for (int i = 0; i < user.getWorkspace().size(); i++) {
@@ -133,7 +142,8 @@ public class KanbanBoard {
     }
 
     public void displayWorkList() {
-        if (user.getWorkspace().get(getIndexWorkspace()).getWork()==null) {
+        border.setPrefWidth(user.getWorkspace().get(getIndexWorkspace()).getWork().size()*(250+20));
+        if (user.getWorkspace().get(getIndexWorkspace()).getWork() == null) {
             alertWorkspace("Please create new worklist");
         } else {
             for (int j = 0; j < user.getWorkspace().get(getIndexWorkspace()).getWork().size(); j++) {
@@ -142,11 +152,15 @@ public class KanbanBoard {
                 TableView<Work> table = editTable(works, getIndexWorkspace(), j);
                 border.addColumn(j, table);
                 border.add(editButton(j, table), j, 1);
-                border.setHgap(10);
-                border.setVgap(10);
-                border.setPadding(new Insets(30, 0, 0, 0));
+                border.getRowConstraints().get(0).setValignment(VPos.TOP);
+                border.setHgap(20);
+                border.setVgap(20);
+                border.setPadding(new Insets(30, 0, 0, 20));
 
             }
+            border.getRowConstraints().get(0).setPrefHeight((sizeRowGridPane()+1)*30+40);
+            border.getRowConstraints().get(0).setMaxHeight((sizeRowGridPane()+1)*30+40);
+            scrollPane.setContent(border);
         }
     }
 
@@ -233,25 +247,26 @@ public class KanbanBoard {
         userRepository.userList = JacksonParser.INSTANCE.toList(json, User.class);
         if (email_share.getText().equals("")) {
             alertWorkspace("Email does not exist");
-        } else if (userRepository.getByEmail(email_share.getText())==null) {
+        } else if (userRepository.getByEmail(email_share.getText()) == null) {
             alertWorkspace("Email does not exist");
         } else {
-            if( userRepository.getByEmail(email_share.getText()).getWorkspace()==null) {
+            if (userRepository.getByEmail(email_share.getText()).getWorkspace() == null) {
                 userRepository.getByEmail(email_share.getText()).setWorkspace(new ArrayList<>());
             }
             userRepository.getByEmail(email_share.getText()).getWorkspace().add(user.getWorkspace().get(getIndexWorkspace()));
             FileService.write(userRepository, "package.json");
 
         }
-        setDisable(share_workspace,false);
-        setOpacity(share_workspace,1);
+        setDisable(share_workspace, false);
+        setOpacity(share_workspace, 1);
         share_workspace.underlineProperty().setValue(false);
-        setDisable(email_share,true);
-        setOpacity(email_share,0);
-        setDisable(share_btn,true);
-        setOpacity(share_btn,0);
+        setDisable(email_share, true);
+        setOpacity(email_share, 0);
+        setDisable(share_btn, true);
+        setOpacity(share_btn, 0);
         email_share.setText("");
     }
+
     @FXML
     void logout(ActionEvent event) throws IOException {
         user.setLoginStatus(LoginStatus.LOGOUT);
@@ -292,13 +307,13 @@ public class KanbanBoard {
                 e.printStackTrace();
             }
         }
-        setDisable(add_new_work,false);
-        setOpacity(add_new_work,1);
+        setDisable(add_new_work, false);
+        setOpacity(add_new_work, 1);
         add_new_work.underlineProperty().setValue(false);
-        setDisable(newWorkName,true);
-        setOpacity(newWorkName,0);
-        setDisable(add_work_btn,true);
-        setOpacity(add_work_btn,0);
+        setDisable(newWorkName, true);
+        setOpacity(newWorkName, 0);
+        setDisable(add_work_btn, true);
+        setOpacity(add_work_btn, 0);
     }
 
     //    Thao tác với WorkList
@@ -328,26 +343,22 @@ public class KanbanBoard {
         } else if (isExist) {
             alertWorkspace("Work list name already exist");
         } else {
-            if (user.getWorkspace().get(getIndexWorkspace()).getWork().size()<5) {
-                WorkList newWorkList = new WorkList(name, 0);
-                newWorkList.getItems().add(new Work(0, "Công việc mới"));
-                user.getWorkspace().get(getIndexWorkspace()).getWork().add(newWorkList);
-                loadWorkList();
-                displayWorkList();
-                saveFile();
-                setComboBoxWorkList();
-            } else {
-                alertWorkspace("The number of work lists should not be more than 5");
-            }
+            WorkList newWorkList = new WorkList(name, 0);
+            newWorkList.getItems().add(new Work(0, "Công việc mới"));
+            user.getWorkspace().get(getIndexWorkspace()).getWork().add(newWorkList);
+            loadWorkList();
+            displayWorkList();
+            saveFile();
+            setComboBoxWorkList();
         }
         newWorkListName.setText("");
-        setDisable(create_new_list,false);
-        setOpacity(create_new_list,1);
+        setDisable(create_new_list, false);
+        setOpacity(create_new_list, 1);
         create_new_list.underlineProperty().setValue(false);
-        setDisable(newWorkListName,true);
-        setOpacity(newWorkListName,0);
-        setDisable(create_btn,true);
-        setOpacity(create_btn,0);
+        setDisable(newWorkListName, true);
+        setOpacity(newWorkListName, 0);
+        setDisable(create_btn, true);
+        setOpacity(create_btn, 0);
     }
 
     @FXML
@@ -370,13 +381,13 @@ public class KanbanBoard {
             }
         }
         comboBoxWorkList.setValue(user.getWorkspace().get(getIndexWorkspace()).getWork().get(0).getName());
-        setDisable(delete_list,false);
-        setOpacity(delete_list,1);
+        setDisable(delete_list, false);
+        setOpacity(delete_list, 1);
         delete_list.underlineProperty().setValue(false);
-        setDisable(comboBoxWorkList,true);
-        setOpacity(comboBoxWorkList,0);
-        setDisable(delete_btn,true);
-        setOpacity(delete_btn,0);
+        setDisable(comboBoxWorkList, true);
+        setOpacity(comboBoxWorkList, 0);
+        setDisable(delete_btn, true);
+        setOpacity(delete_btn, 0);
     }
 
 
@@ -406,7 +417,8 @@ public class KanbanBoard {
         nameCol.setEditable(true);
         table.getColumns().add(nameCol);
         table.setItems(obj);
-        table.setMinWidth(150);
+        table.setPrefHeight((obj.size()+1)*30+25);
+        table.setMaxHeight(table.getPrefHeight());
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         return table;
@@ -418,8 +430,8 @@ public class KanbanBoard {
         Button delete = new Button("Delete");
         delete.setOnAction(event -> {
             int work = node.getSelectionModel().getSelectedIndex();
-            if (getWorkInList(index).size()==1) {
-                getWorkInList(index).add(new Work(9," "));
+            if (getWorkInList(index).size() == 1) {
+                getWorkInList(index).add(new Work(9, " "));
                 try {
                     saveFile();
                 } catch (IOException e) {
@@ -438,12 +450,12 @@ public class KanbanBoard {
 
         edit.add(delete, 0, 0);
         if (index < user.getWorkspace().get(getIndexWorkspace()).getWork().size() - 1) {
-            Button next = new Button("Next");
-            next.setOnAction(event -> {
+            Button forward = new Button("Forward");
+            forward.setOnAction(event -> {
                 int selectedIndex = node.getSelectionModel().getSelectedIndex();
                 if (index < user.getWorkspace().get(getIndexWorkspace()).getWork().size()) {
-                    if (getWorkInList(index).size()<=1) {
-                        getWorkInList(index).add(new Work(9," "));
+                    if (getWorkInList(index).size() <= 1) {
+                        getWorkInList(index).add(new Work(9, " "));
                         try {
                             saveFile();
                         } catch (IOException e) {
@@ -451,7 +463,7 @@ public class KanbanBoard {
                         }
                     }
                     Work work = getWorkInList(index).remove(selectedIndex);
-                    getWorkInList(index+1).removeIf(works -> works.getName().equals(" "));
+                    getWorkInList(index + 1).removeIf(works -> works.getName().equals(" "));
                     getWorkInList(index + 1).add(work);
                     loadWorkList();
                     displayWorkList();
@@ -463,7 +475,35 @@ public class KanbanBoard {
                 }
             });
 
-            edit.add(next, 1, 0);
+            edit.add(forward, 2, 0);
+        }
+        if (index > 0) {
+            Button backward = new Button("Backward");
+            backward.setOnAction(event -> {
+                int selectedIndex = node.getSelectionModel().getSelectedIndex();
+                if (index < user.getWorkspace().get(getIndexWorkspace()).getWork().size()) {
+                    if (getWorkInList(index).size() <= 1) {
+                        getWorkInList(index).add(new Work(9, " "));
+                        try {
+                            saveFile();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Work work = getWorkInList(index).remove(selectedIndex);
+                    getWorkInList(index - 1).removeIf(works -> works.getName().equals(" "));
+                    getWorkInList(index - 1).add(work);
+                    loadWorkList();
+                    displayWorkList();
+                    try {
+                        saveFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            edit.add(backward, 1, 0);
         }
         edit.setHgap(10);
         edit.setVgap(10);
@@ -489,50 +529,62 @@ public class KanbanBoard {
     private void setOpacity(Node node, int a) {
         node.opacityProperty().setValue(a);
     }
-    private void setDisable(Node node,boolean a) {
+
+    private void setDisable(Node node, boolean a) {
         node.disableProperty().setValue(a);
     }
+
     @FXML
     void addNewWorkLink(ActionEvent event) {
-        setDisable(add_new_work,true);
-        setOpacity(add_new_work,0);
-        setDisable(newWorkName,false);
-        setOpacity(newWorkName,1);
-        setDisable(add_work_btn,false);
-        setOpacity(add_work_btn,1);
+        setDisable(add_new_work, true);
+        setOpacity(add_new_work, 0);
+        setDisable(newWorkName, false);
+        setOpacity(newWorkName, 1);
+        setDisable(add_work_btn, false);
+        setOpacity(add_work_btn, 1);
     }
-
 
 
     @FXML
     void deleteListLink(ActionEvent event) {
-        setDisable(delete_list,true);
-        setOpacity(delete_list,0);
-        setDisable(comboBoxWorkList,false);
-        setOpacity(comboBoxWorkList,1);
-        setDisable(delete_btn,false);
-        setOpacity(delete_btn,1);
+        setDisable(delete_list, true);
+        setOpacity(delete_list, 0);
+        setDisable(comboBoxWorkList, false);
+        setOpacity(comboBoxWorkList, 1);
+        setDisable(delete_btn, false);
+        setOpacity(delete_btn, 1);
 
     }
+
     @FXML
     void createNewList(ActionEvent event) {
-        setDisable(create_new_list,true);
-        setOpacity(create_new_list,0);
-        setDisable(newWorkListName,false);
-        setOpacity(newWorkListName,1);
-        setDisable(create_btn,false);
-        setOpacity(create_btn,1);
+        setDisable(create_new_list, true);
+        setOpacity(create_new_list, 0);
+        setDisable(newWorkListName, false);
+        setOpacity(newWorkListName, 1);
+        setDisable(create_btn, false);
+        setOpacity(create_btn, 1);
     }
+
     @FXML
     void shareWorkspace(ActionEvent event) {
-        setDisable(share_workspace,true);
-        setOpacity(share_workspace,0);
-        setDisable(email_share,false);
-        setOpacity(email_share,1);
-        setDisable(share_btn,false);
-        setOpacity(share_btn,1);
+        setDisable(share_workspace, true);
+        setOpacity(share_workspace, 0);
+        setDisable(email_share, false);
+        setOpacity(email_share, 1);
+        setDisable(share_btn, false);
+        setOpacity(share_btn, 1);
 
     }
-
+public int sizeRowGridPane() {
+        int sizeRow = 0;
+    for (int i = 0; i < user.getWorkspace().get(getIndexWorkspace()).getWork().size() ; i++) {
+            if (sizeRow<user.getWorkspace().get(getIndexWorkspace()).getWork().get(i).getItems().size()) {
+                sizeRow = user.getWorkspace().get(getIndexWorkspace()).getWork().get(i).getItems().size();
+            }
+        }
+    return sizeRow;
+    }
 
 }
+

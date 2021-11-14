@@ -15,7 +15,6 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 640, 350);
         scene.getStylesheets().add(Objects.requireNonNull(Main.class.getResource("css/login.css")).toExternalForm());
-
         stage.setTitle("Login!");
         stage.setScene(scene);
         stage.show();
