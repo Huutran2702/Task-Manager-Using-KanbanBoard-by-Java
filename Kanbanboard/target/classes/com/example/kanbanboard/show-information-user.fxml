@@ -63,7 +63,7 @@
             <Insets left="40.0" />
          </GridPane.margin>
       </Label>
-      <Label fx:id="textfield_alert" prefHeight="18.0" prefWidth="553.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <Label id="content" fx:id="textfield_alert" prefHeight="18.0" prefWidth="553.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <font>
             <Font size="15.0" />
          </font>
@@ -73,12 +73,12 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="user_name" prefHeight="23.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+      <Label id="content" fx:id="user_name" prefHeight="23.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="user_phone" prefHeight="23.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <Label id="content" fx:id="user_phone" prefHeight="23.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <font>
             <Font size="14.0" />
          </font>
@@ -91,12 +91,12 @@
             <Insets left="20.0" top="10.0" />
          </GridPane.margin>
       </Label>
-      <Label fx:id="user_password" prefHeight="23.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+      <Label id="content" fx:id="user_password" prefHeight="23.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="textfield_enterpassword" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" opacity="0.0" prefHeight="6.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+      <TextField id="content1" fx:id="textfield_enterpassword" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" opacity="0.0" prefHeight="6.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
          <font>
             <Font size="14.0" />
          </font>
@@ -104,17 +104,17 @@
             <Insets top="10.0" />
          </GridPane.margin>
       </TextField>
-      <TextField id="content" fx:id="textfield_password" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+      <TextField id="content1" fx:id="textfield_password" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
-      <TextField id="content" fx:id="textfield_phone" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <TextField id="content1" fx:id="textfield_phone" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <font>
             <Font size="14.0" />
          </font>
       </TextField>
-      <TextField id="content" fx:id="textfield_name" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+      <TextField id="content1" fx:id="textfield_name" disable="true" maxWidth="-Infinity" opacity="0.0" prefHeight="26.0" prefWidth="306.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <font>
             <Font size="14.0" />
          </font>
